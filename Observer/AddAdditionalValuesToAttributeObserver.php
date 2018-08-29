@@ -50,7 +50,7 @@ class AddAdditionalValuesToAttributeObserver implements ObserverInterface
         $attribute = $observer->getAttribute();
         $data = $attribute->getData();
         if (isset($data['additional_data'])) {
-            $additionalData = unserialize($data['additional_data']);
+            $additionalData = json_decode($data['additional_data'], true);
             if (isset($additionalData[AdvLayNav::INPUT_TYPE_KEY])) {
                 $attribute->setData(AdvLayNav::INPUT_TYPE_KEY, $additionalData[AdvLayNav::INPUT_TYPE_KEY]);
             }

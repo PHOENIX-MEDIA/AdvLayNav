@@ -59,7 +59,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $iniAdditionalData = [];
         $additionalData = (string) $attribute->getData('additional_data');
         if (!empty($additionalData)) {
-            $additionalData = unserialize($additionalData);
+            $additionalData = json_decode($additionalData,true);
             if (is_array($additionalData)) {
                 $iniAdditionalData = $additionalData;
             }
@@ -68,7 +68,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $dataValue = $attribute->getData($this->inputKey);
         if (!is_null($dataValue)) {
             $iniAdditionalData[$this->inputKey] = $dataValue;
-            $attribute->setData('additional_data', serialize($iniAdditionalData));
+            $attribute->setData('additional_data', json_encode($additionalData));
             if ($dataValue === AdvLayNav::INPUT_TYPE_RANGE_SLIDER ||
                 $dataValue === AdvLayNav::INPUT_TYPE_MULTI_SELECT) {
                 $attribute->setData('is_filterable', true);
@@ -97,10 +97,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param Attribute $attribute
      * @return void
      */
+
+//    removed unserialize for additional data in the method below.
     private function extractAdditionalDataEavAttribute(Attribute $attribute)
     {
         if (!$attribute->hasData($this->inputKey)) {
-            $additionalData = unserialize($attribute->getData('additional_data'));
+            $additionalData = json_decode($attribute->getData('additional_data'), true);
             if (isset($additionalData[$this->inputKey])) {
                 $attribute->setData($this->inputKey, $additionalData[$this->inputKey]);
             }
